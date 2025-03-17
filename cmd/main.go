@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/Sherinas/go-auth-project-Clean/internal/domain"
 	"github.com/Sherinas/go-auth-project-Clean/internal/handler"
+	"github.com/Sherinas/go-auth-project-Clean/internal/middileware"
 
 	"log"
 
@@ -36,7 +37,9 @@ func main() {
 
 	r.POST("/signup", authHandler.SignUp)
 	r.POST("/signin", authHandler.Signin)
-	//	r.GET("/dashboard" auauthHandler.DashBoard)
 
+	protected := r.Group("/api")
+	protected.Use(middileware.JWTMiddleware(jwtService)) // Fixed typo: "middileware" -> "middleware"
+	protected.GET("/dashboard", authHandler.DashBoard)
 	r.Run(":8080")
 }

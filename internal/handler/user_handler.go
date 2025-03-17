@@ -1,8 +1,10 @@
 package handler
 
 import (
-	"github.com/Sherinas/go-auth-project-Clean/internal/usecase"
+	"log"
 	"net/http"
+
+	"github.com/Sherinas/go-auth-project-Clean/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )
@@ -68,10 +70,11 @@ func (a *AuthHandler) Signin(c *gin.Context) {
 
 func (a *AuthHandler) DashBoard(c *gin.Context) {
 
-	name, exists := c.Get("name")
-	email, existsEmail := c.Get("email") // Extracted from middleware
+	id, exists := c.Get("userID")
+	email, existsEmail := c.Get("email")
 
-	// If user details are missing, return an error
+	log.Println(id, email)
+
 	if !exists || !existsEmail {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "Unauthorized access",
@@ -81,7 +84,7 @@ func (a *AuthHandler) DashBoard(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Welcome to your dashboard!",
-		"name":    name,
+		"name":    id,
 		"email":   email,
 	})
 }
